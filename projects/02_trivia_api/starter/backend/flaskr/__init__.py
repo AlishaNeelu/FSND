@@ -21,12 +21,12 @@ def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
   setup_db(app)
-  CORS(app)
+  
   
   '''
   @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
   '''
-
+  CORS(app,resources={"/":{"origins":"*"}})
   '''
   @TODO: Use the after_request decorator to set Access-Control-Allow
   '''
@@ -44,12 +44,13 @@ def create_app(test_config=None):
   @app.route('/categories')
   def retrieve_categories():
     category_list = Category.query.all()
-    #formatted_categories = [category.format() for category in category_list]
+    dict_data = {}
+    for cat in category_list:
+      dict_data[cat.id] = cat.type
 
     return jsonify({
       'success':True,
-      'categories':{category.id: category.type for category in category_list}
-      #'categories':[category.type for category in Category.query.all()]
+      'categories':dict_data
     })
 
   '''
@@ -69,13 +70,16 @@ def create_app(test_config=None):
     questions_list = Question.query.all()
     display_list = pagination(request,questions_list)
     categories = Category.query.all()
+    dict_data = {}
+    for cat in categories:
+      dict_data[cat.id] = cat.type
 
     return jsonify({
       'success':True,
       'questions':display_list,
       'total_questions':len(questions_list),
       'current_category': [],
-      'categories': {category.id: category.type for category in categories}
+      'categories': dict_data
     })
 
   '''
@@ -92,6 +96,9 @@ def create_app(test_config=None):
     questions_list = Question.query.all()
     display_list = pagination(request,questions_list)
     categories = Category.query.all()
+    dict_data = {}
+    for cat in categories:
+      dict_data[cat.id] = cat.type
 
     return jsonify({
       'success':True,
@@ -99,7 +106,7 @@ def create_app(test_config=None):
       'total_questions':len(questions_list),
       'deleted': id,
       'current_category': [],
-      'categories': {category.id: category.type for category in categories}
+      'categories': dict_data
     })
 
   '''
@@ -152,7 +159,7 @@ def create_app(test_config=None):
     search_key = data.get('searchTerm')
 
     questions_filtered = Question.query.filter(Question.question.ilike
-                                                  (f'%{search_key}%')).order_by(Question.id).all()
+                                                  ('%'+search_key+'%')).order_by(Question.id).all()
     questions_list = pagination(request, questions_filtered)
 
     return jsonify({
@@ -256,7 +263,7 @@ def create_app(test_config=None):
     return jsonify({
       "success": False,
       "error": 422,
-      "message": "unprocessable"
+      "message": "unprocessable request"
     }), 422
 
   @app.errorhandler(500)

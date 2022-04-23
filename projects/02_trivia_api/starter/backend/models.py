@@ -11,7 +11,6 @@ DB_NAME = os.getenv('DB_NAME','trivia')
 
 #database_path = "postgresql://{}/{}".format('localhost:5432', database_name)
 database_path = 'postgresql://{0}:{1}@{2}/{3}'.format(DB_USER,DB_PASSWORD,DB_HOST,DB_NAME)
-#database_path = 'postgresql://{0}:{1}@{2}/{3}'.format("postgres","password","localhost:5432","trivia")
 
 db = SQLAlchemy()
 
