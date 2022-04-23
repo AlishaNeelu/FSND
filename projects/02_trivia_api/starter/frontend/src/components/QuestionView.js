@@ -52,7 +52,8 @@ class QuestionView extends Component {
           key={i}
           className={`page-num ${i === this.state.page ? 'active' : ''}`}
           onClick={() => {this.selectPage(i)}}>{i}
-        </span>)
+        </span>
+      )
     }
     return pageNumbers;
   }
@@ -76,7 +77,7 @@ class QuestionView extends Component {
 
   submitSearch = (searchTerm) => {
     $.ajax({
-      url: `/questions`, //TODO: update request URL
+      url: `/questions/find`, //TODO: update request URL
       type: "POST",
       dataType: 'json',
       contentType: 'application/json',

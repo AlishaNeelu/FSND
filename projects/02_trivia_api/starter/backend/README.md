@@ -77,8 +77,8 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 
 
 
-## Review Comment to the Students
-```
+## API Documentation
+
 This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
 
 Endpoints
@@ -87,19 +87,165 @@ GET ...
 POST ...
 DELETE ...
 
-GET '/api/v1.0/categories'
+GET '/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
 - Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
+- Response: Sample response is provided below.
+```
+{
+  "categories": {
+    "1": "Science", 
+    "2": "Art", 
+    "3": "Geography", 
+    "4": "History", 
+    "5": "Entertainment", 
+    "6": "Sports"
+  }, 
+  "success": true
+}
+```
+GET '/questions'
+- Fetches a dictionary of questions for all the categories
+- Request Arguments: page(int)
+- Returns: List of questions, set of categories and total count of questions. 
+- Response: Sample response is provided below.
+```
+{
+  "categories": {
+    "1": "Science", 
+    "2": "Art", 
+    "3": "Geography", 
+    "4": "History", 
+    "5": "Entertainment", 
+    "6": "Sports"
+  }, 
+  "current_category": [], 
+  "questions": [
+    {
+      "answer": "Muhammad Ali", 
+      "category": 4, 
+      "difficulty": 1, 
+      "id": 9, 
+      "question": "What boxer's original name is Cassius Clay?"
+    }, 
+    {
+      "answer": "Apollo 13", 
+      "category": 5, 
+      "difficulty": 4, 
+      "id": 2, 
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination in 1996?"
+    }, 
+    {
+      "answer": "Tom Cruise", 
+      "category": 5, 
+      "difficulty": 4, 
+      "id": 4, 
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    }
+    ], 
+  "success": true, 
+  "total_questions":3
+}
+```
+DELETE '/questions/<id>'
+- Deletes a question from the list of questions
+- Request Arguments: question id(int)
+- Returns: Deleted question id, updated questions list. 
+- Response: Sample response is provided below.
+```
+{
+    "deleted": 4,
+    "categories": {
+    "1": "Science", 
+    "2": "Art", 
+    "3": "Geography", 
+    "4": "History", 
+    "5": "Entertainment", 
+    "6": "Sports"
+    },  
+    "questions": [
+        {
+        "answer": "Muhammad Ali", 
+        "category": 4, 
+        "difficulty": 1, 
+        "id": 9, 
+        "question": "What boxer's original name is Cassius Clay?"
+        }, 
+        {
+        "answer": "Apollo 13", 
+        "category": 5, 
+        "difficulty": 4, 
+        "id": 2, 
+        "question": "What movie earned Tom Hanks his third straight Oscar nomination in 1996?"
+        }, 
+    ], 
+    "success": true, 
+    "total_questions": 2
+}
+```
+POST '/questions'
+- Add a question to the list of questions
+- Request Arguments: category (string), question (string), answer (string), difficulty(int)
+- Returns: New question id, updated questions list, updated question count
+- Response: Sample response is provided below.
+```
+{
+    "questions":[
+        {
+            "question": "When is environment day celebrated?",
+            "id": 25,
+            "answer": "June 5",
+            "category": 2,
+            "difficulty": 2
+        }
+    ],
+    "success": true,
+    "total_questions": 3
+}
+```
+
+POST '/questions/find'
+- Finds and displays the question(s) which match the search term
+- Request Arguments: searchkey(string)
+- Returns: List of questions, set of categories and total count of questions. 
+- Response: Sample response is provided below.
+```
+{
+    "questions":[
+        {
+            "category": 2,
+            "question": "What is the national sport of India?",
+            "answer": "Hockey",
+            "difficulty": 2,
+            "id": 19
+        }
+    ],
+    "success": true,
+    "total_questions": 1
+}
 
 ```
 
+POST '/quizzes'
+- Randomly picks one question for a selected category ignoring previous questions
+- Request Arguments: previous_questions(question dictionary), category(int)
+- Returns: List of questions, set of categories and total count of questions. 
+- Response: Sample response is provided below.
+
+```
+{
+    "question": {
+        "category": 2,
+        "question": "What is the capital of India?",
+        "answer": "New Delhi",
+        "difficulty": 1,
+        "id": 21
+    },
+    "success": true
+}
+
+```
 
 ## Testing
 To run the tests, run
