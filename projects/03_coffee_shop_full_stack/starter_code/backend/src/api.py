@@ -17,7 +17,7 @@ CORS(app)
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 !! Running this function will add one
 '''
-db_drop_and_create_all()
+#db_drop_and_create_all()
 
 # ROUTES
 '''
@@ -34,7 +34,9 @@ def get_drinks():
 
     if len(drinks_list) == 0:
         abort(404)
-    short_drink = [drink.short() for drink in drinks_list]
+
+    short_drink = [d.short() for d in drinks_list]
+
     return jsonify({
         'success': True,
         'drinks': short_drink
@@ -56,7 +58,7 @@ def get_drinks_details(jwt):
     if len(drinks_list) == 0:
         abort(404)
 
-    long_drink = [drink.long() for drink in drinks_list]
+    long_drink = [d.long() for d in drinks_list]
 
     return jsonify({
         'success': True,
@@ -76,8 +78,10 @@ def get_drinks_details(jwt):
 @requires_auth('post:drinks')
 def create_drinks(jwt): 
     body = request.get_json()
+
     if 'title' not in body:
         abort(422)
+
     new_drink = Drink(title=body.get('title'), recipe=json.dumps(body.get('recipe')))
     new_drink.insert()
 
@@ -103,6 +107,7 @@ def create_drinks(jwt):
 @requires_auth('patch:drinks')
 def modify_drink(jwt, id):
     filtered_drink = Drink.query.get(id)
+
     if filtered_drink is None:
         abort(404)
     
@@ -114,10 +119,12 @@ def modify_drink(jwt, id):
 
     if 'title' in body:
         filtered_drink.title = body['title']
+
     if 'recipe' in body:
         filtered_drink.recipe = json.dumps(body['recipe'])
  
     filtered_drink.update()
+
     long_drink = [filtered_drink.long()]
 
     return jsonify({
@@ -139,6 +146,7 @@ def modify_drink(jwt, id):
 @requires_auth('delete:drinks')
 def delete_drinks(jwt, id):
     delete_drink = Drink.query.get(id)
+    
     if delete_drink is None:
         abort(404)
 
